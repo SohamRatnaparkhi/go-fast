@@ -18,11 +18,13 @@ type UserResponse struct {
 	Email string `json:"email"`
 }
 
+// CreateUser — the handler is a plain function.
+// go-fast inspects struct tags at startup, wires resolvers, and calls this automatically.
 func CreateUser(req struct {
 	Body  CreateUserRequest `json:"body"`
 	Token string            `json:"header:Authorization"`
 }) (*UserResponse, error) {
-	fmt.Println("Token received:", req.Token)
+	fmt.Println("Token:", req.Token)
 	return &UserResponse{
 		ID:    "user_123",
 		Name:  req.Body.Name,
@@ -37,6 +39,7 @@ func main() {
 	}
 
 	http.HandleFunc("/users", h)
-	fmt.Println("Server on :8080")
+	fmt.Println("go-fast server on :8080")
+	fmt.Println("curl -X POST localhost:8080/users -H 'Authorization: Bearer tok' -d '{\"name\":\"John\",\"email\":\"j@test.com\"}'")
 	_ = http.ListenAndServe(":8080", nil)
 }
