@@ -1,9 +1,6 @@
 package handler
 
-import "net/http"
+import handlerresolvers "github.com/sohamratnaparkhi/go-fast/pkg/handler/resolvers"
 
-type Context struct {
-    Request  *http.Request
-    Response http.ResponseWriter
-    Params   map[string]string
-}
+// Context is kept as a public alias for backward compatibility.
+type Context = handlerresolvers.Context

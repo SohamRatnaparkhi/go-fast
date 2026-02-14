@@ -5,16 +5,21 @@ import (
 	"reflect"
 )
 
+// errorInterface is used to detect whether the last handler return type is error.
 var errorInterface = reflect.TypeOf((*error)(nil)).Elem()
 
+// Analyze inspects a handler function and returns immutable metadata used by Adapt.
+//
+// The returned metadata is computed once at startup and reused per request.
 func Analyze(fn interface{}) (*HandlerMetadata, error) {
-	if reflect.TypeOf(fn).Kind() != reflect.Func {
+	fnType := reflect.TypeOf(fn)
+	if fnType == nil || fnType.Kind() != reflect.Func {
 		return nil, errors.New("fn is not a function")
 	}
 
 	funcValue := reflect.ValueOf(fn)
 	funcType := funcValue.Type()
-	
+
 	numInputs := funcType.NumIn()
 	numOutputs := funcType.NumOut()
 
