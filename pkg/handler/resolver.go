@@ -15,6 +15,8 @@ type HeaderResolver = handlerResolvers.HeaderResolver
 type QueryResolver = handlerResolvers.QueryResolver
 type PathVarResolver = handlerResolvers.PathVarResolver
 type CookieResolver = handlerResolvers.CookieResolver
+type FormResolver = handlerResolvers.FormResolver
+type FileResolver = handlerResolvers.FileResolver
 
 // NewBodyResolver constructs a resolver for json:"body" fields.
 func NewBodyResolver(fieldIdx int, fieldType reflect.Type) *BodyResolver {
@@ -39,4 +41,14 @@ func NewPathVarResolver(fieldIdx int, paramName string, fieldType reflect.Type) 
 // NewCookieResolver constructs a resolver for json:"cookie:<name>" fields.
 func NewCookieResolver(fieldIdx int, cookieName string, fieldType reflect.Type) *CookieResolver {
 	return handlerResolvers.NewCookieResolver(fieldIdx, cookieName, fieldType)
+}
+
+// NewFormResolver constructs a resolver for json:"form:<name>" fields.
+func NewFormResolver(fieldIdx int, formName string, fieldType reflect.Type) *FormResolver {
+	return handlerResolvers.NewFormResolver(fieldIdx, formName, fieldType)
+}
+
+// NewFileResolver constructs a resolver for json:"file:<name>" fields.
+func NewFileResolver(fieldIdx int, fileName string) *FileResolver {
+	return handlerResolvers.NewFileResolver(fieldIdx, fileName)
 }

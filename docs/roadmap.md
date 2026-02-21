@@ -3,7 +3,7 @@
 ## Completed
 
 - [x] **Analyzer** — Reflect-based function inspection with metadata caching
-- [x] **Resolvers** — Body, Header, Query, Path, Cookie with automatic type conversion
+- [x] **Resolvers** — Body, Header, Query, Path, Cookie, Form, File with automatic type conversion
 - [x] **Adapter** — `Adapt(fn)` wiring with startup validation and per-request closure
 - [x] **Type conversion** — string/bool/int*/uint*/float*/pointer support
 - [x] **Error handling** — Automatic 400/500 responses from resolver and handler errors
