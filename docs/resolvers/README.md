@@ -23,8 +23,10 @@ json:"<source>:<name>"
 | Query | `json:"query:<name>"` | `request.URL.Query().Get(name)` |
 | Path | `json:"path:<name>"` | `ctx.Params[name]` |
 | Cookie | `json:"cookie:<name>"` | `request.Cookie(name)` |
+| Form | `json:"form:<name>"` | `request.PostFormValue(name)` |
+| File | `json:"file:<name>"` | `request.MultipartForm.File[name]` |
 
-## Example: All Five in One Handler
+## Example: All Seven in One Handler
 
 ```go
 func CreateOrder(req struct {
@@ -48,7 +50,9 @@ func CreateOrder(req struct {
 - Only one `json:"body"` field is allowed per struct
 - Tag names cannot be empty (e.g., `json:"header:"` is invalid)
 - Untagged or `json:"-"` fields are skipped
-- String-based resolvers (header, query, path, cookie) support automatic [type conversion](../type-conversion.md)
+- String-based resolvers (header, query, path, cookie, form) support automatic [type conversion](../type-conversion.md)
+- File fields must be `*multipart.FileHeader`
+- `json:"body"` cannot be combined with `json:"form:..."` or `json:"file:..."` (both consume the request body)
 
 ## Detailed Docs
 
@@ -57,3 +61,5 @@ func CreateOrder(req struct {
 - [Query Resolver](./query.md)
 - [Path Resolver](./path.md)
 - [Cookie Resolver](./cookie.md)
+- [Form Resolver](./form.md)
+- [File Resolver](./file.md)

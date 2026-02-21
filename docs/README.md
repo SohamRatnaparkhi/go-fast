@@ -10,6 +10,8 @@
   - [Query](./resolvers/query.md)
   - [Path](./resolvers/path.md)
   - [Cookie](./resolvers/cookie.md)
+  - [Form](./resolvers/form.md)
+  - [File](./resolvers/file.md)
 - [Adapter](./adapter.md) — How `Adapt()` wires everything together
 - [Type Conversion](./type-conversion.md) — Automatic string-to-type conversion
 - [DX Comparison](./dx-comparison.md) — go-fast vs Gin vs Fiber side-by-side

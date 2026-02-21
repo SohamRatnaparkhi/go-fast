@@ -58,7 +58,7 @@ type FieldResolver interface {
 }
 ```
 
-Five concrete implementations:
+Seven concrete implementations:
 
 | Resolver | Source | Key Feature |
 |----------|--------|-------------|
@@ -67,8 +67,10 @@ Five concrete implementations:
 | `QueryResolver` | `request.URL.Query()` | String + type conversion |
 | `PathVarResolver` | `ctx.Params` map | String + type conversion |
 | `CookieResolver` | `request.Cookie()` | String + type conversion |
+| `FormResolver` | `request.PostFormValue()` | String + type conversion |
+| `FileResolver` | `request.MultipartForm.File` | `*multipart.FileHeader` |
 
-The four string-based resolvers share `convertStringToType()` for automatic type conversion (string, bool, int*, uint*, float*, pointer).
+The five string-based resolvers share `convertStringToType()` for automatic type conversion (string, bool, int*, uint*, float*, pointer). The file resolver returns `*multipart.FileHeader` directly.
 
 ### `pkg/handler/context.go` — Request Context
 
@@ -103,11 +105,13 @@ Adapter Closure
     │
     ├── reflect.New(inputType)     → zero-value struct
     │
-    ├── BodyResolver.Resolve()     → populate body field
+    ├── BodyResolver.Resolve()     → populate body field (JSON)
     ├── HeaderResolver.Resolve()   → populate header field
     ├── QueryResolver.Resolve()    → populate query field
     ├── PathVarResolver.Resolve()  → populate path field
     ├── CookieResolver.Resolve()   → populate cookie field
+    ├── FormResolver.Resolve()     → populate form field
+    ├── FileResolver.Resolve()     → populate file field (multipart)
     │
     ├── meta.FuncValue.Call()      → invoke handler
     │
@@ -122,3 +126,4 @@ Adapter Closure
 3. **Startup validation** — `Adapt()` returns errors for bad signatures. No runtime surprises.
 4. **Body resolved first** — Body consumes `request.Body` (a reader), so it must run before anything else that might need it.
 5. **Standard `http.HandlerFunc`** — The output of `Adapt()` works with any Go HTTP router or middleware.
+6. **Body vs form/file exclusivity** — JSON body and form/file resolvers both consume the request body through different parsers. `Adapt()` rejects structs that mix them.

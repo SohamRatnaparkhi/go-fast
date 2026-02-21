@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+
+	handlerResolvers "github.com/sohamratnaparkhi/go-fast/pkg/handler/resolvers"
 )
 
 // buildResolvers compiles resolver instances for tagged fields in inputType.
@@ -14,6 +16,7 @@ import (
 func buildResolvers(inputType reflect.Type) ([]FieldResolver, int, error) {
 	resolvers := make([]FieldResolver, 0, inputType.NumField())
 	bodyFieldIdx := -1
+	hasFormOrFile := false
 
 	for i := 0; i < inputType.NumField(); i++ {
 		field := inputType.Field(i)
@@ -61,7 +64,30 @@ func buildResolvers(inputType reflect.Type) ([]FieldResolver, int, error) {
 				return nil, -1, fmt.Errorf("cookie tag name cannot be empty for field %q", field.Name)
 			}
 			resolvers = append(resolvers, NewCookieResolver(i, name, field.Type))
+
+		case strings.HasPrefix(tag, "form:"):
+			name := strings.TrimPrefix(tag, "form:")
+			if name == "" {
+				return nil, -1, fmt.Errorf("form tag name cannot be empty for field %q", field.Name)
+			}
+			hasFormOrFile = true
+			resolvers = append(resolvers, NewFormResolver(i, name, field.Type))
+
+		case strings.HasPrefix(tag, "file:"):
+			name := strings.TrimPrefix(tag, "file:")
+			if name == "" {
+				return nil, -1, fmt.Errorf("file tag name cannot be empty for field %q", field.Name)
+			}
+			if field.Type != handlerResolvers.MultipartFileHeaderType {
+				return nil, -1, fmt.Errorf("file field %q must be *multipart.FileHeader, got %s", field.Name, field.Type)
+			}
+			hasFormOrFile = true
+			resolvers = append(resolvers, NewFileResolver(i, name))
 		}
+	}
+
+	if bodyFieldIdx >= 0 && hasFormOrFile {
+		return nil, -1, fmt.Errorf("cannot combine body resolver with form/file resolvers: body consumes request body as JSON, form/file consume it as multipart or url-encoded data")
 	}
 
 	return resolvers, bodyFieldIdx, nil
