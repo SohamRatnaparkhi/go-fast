@@ -35,7 +35,7 @@
 - [ ] **Slice query params** — `?tag=a&tag=b` → `[]string{"a", "b"}`
 - [ ] **Custom type conversion** — `encoding.TextUnmarshaler` support
 - [ ] **Time parsing** — `time.Time` from string with configurable format
-- [ ] **Default values** — `json:"query:page,default=1"` tag extension
+- [ ] **Default values** — `gofast:"query:page,default=1"` tag extension
 
 ## DX Improvements Proposed
 

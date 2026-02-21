@@ -5,16 +5,16 @@ Extracts a value from an HTTP request header.
 ## Tag
 
 ```
-json:"header:<header-name>"
+gofast:"header:<header-name>"
 ```
 
 ## Example
 
 ```go
 func Handler(req struct {
-    Token     string `json:"header:Authorization"`
-    RequestID string `json:"header:X-Request-ID"`
-    Retries   int    `json:"header:X-Retry-Count"`
+    Token     string `gofast:"header:Authorization"`
+    RequestID string `gofast:"header:X-Request-ID"`
+    Retries   int    `gofast:"header:X-Retry-Count"`
 }) (*Response, error) {
     // req.Token     = "Bearer abc123"
     // req.RequestID = "req-456"
@@ -32,6 +32,6 @@ func Handler(req struct {
 
 | Framework | Code |
 |-----------|------|
-| **go-fast** | `Token string \`json:"header:Authorization"\`` |
+| **go-fast** | `Token string \`gofast:"header:Authorization"\`` |
 | Gin | `token := c.GetHeader("Authorization")` |
 | Fiber | `token := c.Get("Authorization")` |

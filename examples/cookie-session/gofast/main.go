@@ -14,8 +14,8 @@ type ProfileResponse struct {
 
 // GetProfile — cookies are extracted automatically by tag.
 func GetProfile(req struct {
-	Session string `json:"cookie:session_id"`
-	Theme   string `json:"cookie:theme"`
+	Session string `gofast:"cookie:session_id"`
+	Theme   string `gofast:"cookie:theme"`
 }) (*ProfileResponse, error) {
 	return &ProfileResponse{
 		Session: req.Session,

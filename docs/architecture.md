@@ -121,7 +121,7 @@ Adapter Closure
 
 ## Design Decisions
 
-1. **Struct tags over conventions** — Explicit is better than implicit. `json:"header:Authorization"` is unambiguous.
+1. **Struct tags over conventions** — Explicit is better than implicit. `gofast:"header:Authorization"` is unambiguous.
 2. **One struct input** — Forces grouping of all inputs. Makes the handler self-documenting.
 3. **Startup validation** — `Adapt()` returns errors for bad signatures. No runtime surprises.
 4. **Body resolved first** — Body consumes `request.Body` (a reader), so it must run before anything else that might need it.

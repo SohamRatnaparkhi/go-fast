@@ -21,8 +21,8 @@ type UserResponse struct {
 // CreateUser — the handler is a plain function.
 // go-fast inspects struct tags at startup, wires resolvers, and calls this automatically.
 func CreateUser(req struct {
-	Body  CreateUserRequest `json:"body"`
-	Token string            `json:"header:Authorization"`
+	Body  CreateUserRequest `gofast:"body"`
+	Token string            `gofast:"header:Authorization"`
 }) (*UserResponse, error) {
 	fmt.Println("Token:", req.Token)
 	return &UserResponse{

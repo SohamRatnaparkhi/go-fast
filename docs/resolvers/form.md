@@ -5,16 +5,16 @@ Extracts a value from the POST body of a form submission.
 ## Tag
 
 ```
-json:"form:<field-name>"
+gofast:"form:<field-name>"
 ```
 
 ## Example
 
 ```go
 func SubmitForm(req struct {
-    Name  string `json:"form:name"`
-    Email string `json:"form:email"`
-    Age   int    `json:"form:age"`
+    Name  string `gofast:"form:name"`
+    Email string `gofast:"form:email"`
+    Age   int    `gofast:"form:age"`
 }) (*Response, error) {
     // req.Name  = "alice"
     // req.Email = "alice@example.com"
@@ -28,7 +28,7 @@ func SubmitForm(req struct {
 - Works with both `application/x-www-form-urlencoded` and `multipart/form-data`
 - Missing fields return zero values (like header/query — not an error)
 - Automatic [type conversion](../type-conversion.md) for non-string types
-- **Cannot be combined with `json:"body"`** — both consume the request body
+- **Cannot be combined with `gofast:"body"`** — both consume the request body
 
 ## Combined with File Resolver
 
@@ -36,8 +36,8 @@ Form and file resolvers work together for multipart uploads:
 
 ```go
 func UploadDocument(req struct {
-    Title    string                `json:"form:title"`
-    Document *multipart.FileHeader `json:"file:document"`
+    Title    string                `gofast:"form:title"`
+    Document *multipart.FileHeader `gofast:"file:document"`
 }) (*Response, error) {
     // req.Title    = "My Report"
     // req.Document = uploaded file header
@@ -48,6 +48,6 @@ func UploadDocument(req struct {
 
 | Framework | Code |
 |-----------|------|
-| **go-fast** | `Name string \`json:"form:name"\`` |
+| **go-fast** | `Name string \`gofast:"form:name"\`` |
 | Gin | `name := c.PostForm("name")` |
 | Fiber | `name := c.FormValue("name")` |

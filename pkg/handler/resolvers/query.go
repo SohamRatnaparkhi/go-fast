@@ -14,7 +14,7 @@ type QueryResolver struct {
 
 var _ FieldResolver = (*QueryResolver)(nil)
 
-// NewQueryResolver constructs a resolver for json:"query:<name>" fields.
+// NewQueryResolver constructs a resolver for gofast:"query:<name>" fields.
 func NewQueryResolver(fieldIdx int, queryName string, fieldType reflect.Type) *QueryResolver {
 	return &QueryResolver{fieldIdx: fieldIdx, queryName: queryName, fieldType: fieldType}
 }

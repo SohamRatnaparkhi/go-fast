@@ -14,7 +14,7 @@ type CookieResolver struct {
 
 var _ FieldResolver = (*CookieResolver)(nil)
 
-// NewCookieResolver constructs a resolver for json:"cookie:<name>" fields.
+// NewCookieResolver constructs a resolver for gofast:"cookie:<name>" fields.
 func NewCookieResolver(fieldIdx int, cookieName string, fieldType reflect.Type) *CookieResolver {
 	return &CookieResolver{fieldIdx: fieldIdx, cookieName: cookieName, fieldType: fieldType}
 }

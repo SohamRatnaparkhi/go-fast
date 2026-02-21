@@ -21,10 +21,10 @@ type createUserBody struct {
 }
 
 type createUserInput struct {
-	Body    createUserBody `json:"body"`
-	Token   string         `json:"header:Authorization"`
-	Active  bool           `json:"query:active"`
-	Session string         `json:"cookie:session"`
+	Body    createUserBody `gofast:"body"`
+	Token   string         `gofast:"header:Authorization"`
+	Active  bool           `gofast:"query:active"`
+	Session string         `gofast:"cookie:session"`
 }
 
 type createUserOutput struct {
@@ -106,7 +106,7 @@ func TestAdapt_RequiresSingleStructInput(t *testing.T) {
 
 func TestAdapt_PathFieldWithoutParams_Returns400(t *testing.T) {
 	type input struct {
-		ID int `json:"path:id"`
+		ID int `gofast:"path:id"`
 	}
 
 	h, err := handler.Adapt(func(req input) (map[string]int, error) {
@@ -128,9 +128,9 @@ func TestAdapt_PathFieldWithoutParams_Returns400(t *testing.T) {
 
 func TestAdapt_FormFields(t *testing.T) {
 	type formInput struct {
-		Name  string `json:"form:name"`
-		Email string `json:"form:email"`
-		Age   int    `json:"form:age"`
+		Name  string `gofast:"form:name"`
+		Email string `gofast:"form:email"`
+		Age   int    `gofast:"form:age"`
 	}
 	type formOutput struct {
 		Name  string `json:"name"`
@@ -168,9 +168,9 @@ func TestAdapt_FormFields(t *testing.T) {
 
 func TestAdapt_FormWithHeaderAndQuery(t *testing.T) {
 	type input struct {
-		Name   string `json:"form:name"`
-		Token  string `json:"header:Authorization"`
-		Format string `json:"query:format"`
+		Name   string `gofast:"form:name"`
+		Token  string `gofast:"header:Authorization"`
+		Format string `gofast:"query:format"`
 	}
 	type output struct {
 		Name   string `json:"name"`
@@ -211,7 +211,7 @@ func TestAdapt_FormWithHeaderAndQuery(t *testing.T) {
 
 func TestAdapt_FileUpload(t *testing.T) {
 	type uploadInput struct {
-		Avatar *multipart.FileHeader `json:"file:avatar"`
+		Avatar *multipart.FileHeader `gofast:"file:avatar"`
 	}
 	type uploadOutput struct {
 		Filename string `json:"filename"`
@@ -262,8 +262,8 @@ func TestAdapt_FileUpload(t *testing.T) {
 
 func TestAdapt_FormAndFile(t *testing.T) {
 	type input struct {
-		Title    string                `json:"form:title"`
-		Document *multipart.FileHeader `json:"file:document"`
+		Title    string                `gofast:"form:title"`
+		Document *multipart.FileHeader `gofast:"file:document"`
 	}
 	type output struct {
 		Title    string `json:"title"`
@@ -314,8 +314,8 @@ func TestAdapt_FormAndFile(t *testing.T) {
 
 func TestAdapt_BodyAndForm_Error(t *testing.T) {
 	type badInput struct {
-		Body createUserBody `json:"body"`
-		Name string         `json:"form:name"`
+		Body createUserBody `gofast:"body"`
+		Name string         `gofast:"form:name"`
 	}
 
 	_, err := handler.Adapt(func(req badInput) error { return nil })
@@ -326,8 +326,8 @@ func TestAdapt_BodyAndForm_Error(t *testing.T) {
 
 func TestAdapt_BodyAndFile_Error(t *testing.T) {
 	type badInput struct {
-		Body   createUserBody        `json:"body"`
-		Avatar *multipart.FileHeader `json:"file:avatar"`
+		Body   createUserBody        `gofast:"body"`
+		Avatar *multipart.FileHeader `gofast:"file:avatar"`
 	}
 
 	_, err := handler.Adapt(func(req badInput) error { return nil })
@@ -338,7 +338,7 @@ func TestAdapt_BodyAndFile_Error(t *testing.T) {
 
 func TestAdapt_FileWrongType_Error(t *testing.T) {
 	type badInput struct {
-		Avatar string `json:"file:avatar"`
+		Avatar string `gofast:"file:avatar"`
 	}
 
 	_, err := handler.Adapt(func(req badInput) error { return nil })
@@ -349,7 +349,7 @@ func TestAdapt_FileWrongType_Error(t *testing.T) {
 
 func TestAdapt_FileUpload_MissingFile_Returns400(t *testing.T) {
 	type uploadInput struct {
-		Avatar *multipart.FileHeader `json:"file:avatar"`
+		Avatar *multipart.FileHeader `gofast:"file:avatar"`
 	}
 
 	h, err := handler.Adapt(func(req uploadInput) (map[string]string, error) {

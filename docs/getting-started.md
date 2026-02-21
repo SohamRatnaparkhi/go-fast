@@ -30,8 +30,8 @@ type UserResponse struct {
 }
 
 func CreateUser(req struct {
-    Body  CreateUserRequest `json:"body"`
-    Token string            `json:"header:Authorization"`
+    Body  CreateUserRequest `gofast:"body"`
+    Token string            `gofast:"header:Authorization"`
 }) (*UserResponse, error) {
     fmt.Println("Token:", req.Token)
     return &UserResponse{

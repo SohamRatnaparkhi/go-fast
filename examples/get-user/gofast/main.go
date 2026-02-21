@@ -14,7 +14,7 @@ type UserResponse struct {
 
 // GetUser — path variable :id is extracted and converted to int automatically.
 func GetUser(req struct {
-	ID int `json:"path:id"`
+	ID int `gofast:"path:id"`
 }) (*UserResponse, error) {
 	return &UserResponse{
 		ID:   req.ID,

@@ -54,11 +54,11 @@ cd examples/create-user/fiber && go mod tidy && go run main.go
 
 ```go
 func CreateOrder(req struct {
-    Body     OrderBody `json:"body"`
-    UserID   int       `json:"path:user_id"`
-    Currency string    `json:"query:currency"`
-    Token    string    `json:"header:Authorization"`
-    Session  string    `json:"cookie:sid"`
+    Body     OrderBody `gofast:"body"`
+    UserID   int       `gofast:"path:user_id"`
+    Currency string    `gofast:"query:currency"`
+    Token    string    `gofast:"header:Authorization"`
+    Session  string    `gofast:"cookie:sid"`
 }) (*OrderResponse, error) {
     // Just use req.Body, req.UserID, req.Currency, etc.
 }

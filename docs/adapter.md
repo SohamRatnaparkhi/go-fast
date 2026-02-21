@@ -81,7 +81,7 @@ All errors are returned as JSON:
 - Function has != 1 input parameter
 - Input parameter is not a struct
 - Tagged field is unexported
-- Multiple `json:"body"` fields
-- Empty tag name (e.g., `json:"header:"`)
+- Multiple `gofast:"body"` fields
+- Empty tag name (e.g., `gofast:"header:"`)
 
 This means invalid handlers are caught at server startup, not at request time.

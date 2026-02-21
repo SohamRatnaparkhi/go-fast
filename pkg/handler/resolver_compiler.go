@@ -13,14 +13,14 @@ import (
 // It returns both resolver list and the index of the body field (if any).
 // The body index is tracked separately because request body is a one-shot reader
 // and should be resolved first.
-func buildResolvers(inputType reflect.Type) ([]FieldResolver, int, error) {
+func buildResolvers(inputType reflect.Type, maxMemory int64) ([]FieldResolver, int, error) {
 	resolvers := make([]FieldResolver, 0, inputType.NumField())
 	bodyFieldIdx := -1
 	hasFormOrFile := false
 
 	for i := 0; i < inputType.NumField(); i++ {
 		field := inputType.Field(i)
-		tag := normalizedJSONTag(field.Tag.Get("json"))
+		tag := normalizedTag(field.Tag.Get("gofast"))
 		if tag == "" || tag == "-" {
 			continue
 		}
@@ -82,7 +82,7 @@ func buildResolvers(inputType reflect.Type) ([]FieldResolver, int, error) {
 				return nil, -1, fmt.Errorf("file field %q must be *multipart.FileHeader, got %s", field.Name, field.Type)
 			}
 			hasFormOrFile = true
-			resolvers = append(resolvers, NewFileResolver(i, name))
+			resolvers = append(resolvers, NewFileResolver(i, name, maxMemory))
 		}
 	}
 
@@ -93,8 +93,8 @@ func buildResolvers(inputType reflect.Type) ([]FieldResolver, int, error) {
 	return resolvers, bodyFieldIdx, nil
 }
 
-// normalizedJSONTag returns the first comma-delimited segment of a json tag.
-func normalizedJSONTag(tag string) string {
+// normalizedTag returns the first comma-delimited segment of a struct tag.
+func normalizedTag(tag string) string {
 	tag = strings.TrimSpace(tag)
 	if tag == "" {
 		return ""

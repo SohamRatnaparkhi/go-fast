@@ -18,9 +18,9 @@ type ContactResponse struct {
 // Each form field is declared as a struct field with a form: tag.
 // Type conversion works the same as query/header resolvers.
 func SubmitContact(req struct {
-	Name    string `json:"form:name"`
-	Email   string `json:"form:email"`
-	Message string `json:"form:message"`
+	Name    string `gofast:"form:name"`
+	Email   string `gofast:"form:email"`
+	Message string `gofast:"form:message"`
 }) (*ContactResponse, error) {
 	return &ContactResponse{
 		Name:    req.Name,

@@ -18,7 +18,7 @@ type FormResolver struct {
 
 var _ FieldResolver = (*FormResolver)(nil)
 
-// NewFormResolver constructs a resolver for json:"form:<name>" fields.
+// NewFormResolver constructs a resolver for gofast:"form:<name>" fields.
 func NewFormResolver(fieldIdx int, formName string, fieldType reflect.Type) *FormResolver {
 	return &FormResolver{fieldIdx: fieldIdx, formName: formName, fieldType: fieldType}
 }

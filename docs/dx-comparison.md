@@ -8,11 +8,11 @@ A side-by-side comparison of the same endpoint implemented in three frameworks.
 
 ```go
 func CreateOrder(req struct {
-    Body     OrderBody `json:"body"`
-    UserID   int       `json:"path:user_id"`
-    Currency string    `json:"query:currency"`
-    Token    string    `json:"header:Authorization"`
-    Session  string    `json:"cookie:sid"`
+    Body     OrderBody `gofast:"body"`
+    UserID   int       `gofast:"path:user_id"`
+    Currency string    `gofast:"query:currency"`
+    Token    string    `gofast:"header:Authorization"`
+    Session  string    `gofast:"cookie:sid"`
 }) (*OrderResponse, error) {
     return &OrderResponse{
         UserID:    req.UserID,

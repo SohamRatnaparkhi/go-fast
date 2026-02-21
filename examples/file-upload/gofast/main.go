@@ -19,8 +19,8 @@ type UploadResponse struct {
 // The form: tag reads text fields, the file: tag reads uploaded files.
 // The file field must be *multipart.FileHeader — validated at startup.
 func UploadDocument(req struct {
-	Title    string                `json:"form:title"`
-	Document *multipart.FileHeader `json:"file:document"`
+	Title    string                `gofast:"form:title"`
+	Document *multipart.FileHeader `gofast:"file:document"`
 }) (*UploadResponse, error) {
 	return &UploadResponse{
 		Title:    req.Title,

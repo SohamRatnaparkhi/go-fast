@@ -15,9 +15,9 @@ type SearchResult struct {
 
 // SearchUsers — query params are extracted automatically from ?q=...&page=...&active=...
 func SearchUsers(req struct {
-	Query  string `json:"query:q"`
-	Page   int    `json:"query:page"`
-	Active bool   `json:"query:active"`
+	Query  string `gofast:"query:q"`
+	Page   int    `gofast:"query:page"`
+	Active bool   `gofast:"query:active"`
 }) (*SearchResult, error) {
 	return &SearchResult{
 		Query:  req.Query,

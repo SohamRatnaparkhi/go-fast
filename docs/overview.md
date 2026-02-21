@@ -30,8 +30,8 @@ Every handler repeats the same pattern: extract, parse, convert, validate, call,
 
 ```go
 func CreateUser(req struct {
-    Body  CreateUserRequest `json:"body"`
-    Token string            `json:"header:Authorization"`
+    Body  CreateUserRequest `gofast:"body"`
+    Token string            `gofast:"header:Authorization"`
 }) (*UserResponse, error) {
     fmt.Println("Token:", req.Token)
     return &UserResponse{ID: "123", Name: req.Body.Name}, nil
@@ -55,11 +55,11 @@ That's it. No manual parsing, no manual error handling, no manual response writi
 
 | Feature | Tag | Example |
 |---------|-----|---------|
-| JSON body | `json:"body"` | `Body CreateUserRequest \`json:"body"\`` |
-| Header | `json:"header:<name>"` | `Token string \`json:"header:Authorization"\`` |
-| Query param | `json:"query:<name>"` | `Page int \`json:"query:page"\`` |
-| Path variable | `json:"path:<name>"` | `ID int \`json:"path:id"\`` |
-| Cookie | `json:"cookie:<name>"` | `Session string \`json:"cookie:session_id"\`` |
+| JSON body | `gofast:"body"` | `Body CreateUserRequest \`gofast:"body"\`` |
+| Header | `gofast:"header:<name>"` | `Token string \`gofast:"header:Authorization"\`` |
+| Query param | `gofast:"query:<name>"` | `Page int \`gofast:"query:page"\`` |
+| Path variable | `gofast:"path:<name>"` | `ID int \`gofast:"path:id"\`` |
+| Cookie | `gofast:"cookie:<name>"` | `Session string \`gofast:"cookie:session_id"\`` |
 | Auto type conversion | — | string, int*, uint*, float*, bool, pointer types |
 | Error return handling | — | Return `error` as last value → automatic 500 |
 | No-return handlers | — | Return nothing → automatic 204 No Content |

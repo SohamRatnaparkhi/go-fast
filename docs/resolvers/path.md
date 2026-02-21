@@ -5,14 +5,14 @@ Extracts a value from URL path parameters (e.g., `/users/:id`).
 ## Tag
 
 ```
-json:"path:<param-name>"
+gofast:"path:<param-name>"
 ```
 
 ## Example
 
 ```go
 func GetUser(req struct {
-    ID int `json:"path:id"`
+    ID int `gofast:"path:id"`
 }) (*UserResponse, error) {
     // GET /users/42
     // req.ID = 42 (auto-converted from string)
@@ -30,6 +30,6 @@ func GetUser(req struct {
 
 | Framework | Code |
 |-----------|------|
-| **go-fast** | `ID int \`json:"path:id"\`` |
+| **go-fast** | `ID int \`gofast:"path:id"\`` |
 | Gin | `idStr := c.Param("id"); id, _ := strconv.Atoi(idStr)` |
 | Fiber | `idStr := c.Params("id"); id, _ := strconv.Atoi(idStr)` |

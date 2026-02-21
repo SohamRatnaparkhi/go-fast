@@ -14,7 +14,7 @@ type PathVarResolver struct {
 
 var _ FieldResolver = (*PathVarResolver)(nil)
 
-// NewPathVarResolver constructs a resolver for json:"path:<name>" fields.
+// NewPathVarResolver constructs a resolver for gofast:"path:<name>" fields.
 func NewPathVarResolver(fieldIdx int, paramName string, fieldType reflect.Type) *PathVarResolver {
 	return &PathVarResolver{fieldIdx: fieldIdx, paramName: paramName, fieldType: fieldType}
 }

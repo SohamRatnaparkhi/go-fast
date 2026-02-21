@@ -5,16 +5,16 @@ Extracts a value from URL query parameters.
 ## Tag
 
 ```
-json:"query:<param-name>"
+gofast:"query:<param-name>"
 ```
 
 ## Example
 
 ```go
 func SearchUsers(req struct {
-    Query  string `json:"query:q"`
-    Page   int    `json:"query:page"`
-    Active bool   `json:"query:active"`
+    Query  string `gofast:"query:q"`
+    Page   int    `gofast:"query:page"`
+    Active bool   `gofast:"query:active"`
 }) (*SearchResult, error) {
     // GET /search?q=john&page=2&active=true
     // req.Query  = "john"
@@ -34,7 +34,7 @@ func SearchUsers(req struct {
 
 | Framework | Code |
 |-----------|------|
-| **go-fast** | `Page int \`json:"query:page"\`` |
+| **go-fast** | `Page int \`gofast:"query:page"\`` |
 | Gin | `pageStr := c.Query("page"); page, _ := strconv.Atoi(pageStr)` |
 | Fiber | `pageStr := c.Query("page"); page, _ := strconv.Atoi(pageStr)` |
 

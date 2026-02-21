@@ -2,16 +2,38 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
 )
 
+// AdaptOption configures the behavior of Adapt.
+type AdaptOption func(*adaptConfig)
+
+type adaptConfig struct {
+	maxMemory int64
+}
+
+const defaultMaxMemory = 32 << 20 // 32 MB
+
+// WithMaxMemory sets the maximum bytes stored in memory for multipart form
+// parsing. Files beyond this limit are written to temporary files on disk.
+// Default is 32 MB.
+func WithMaxMemory(n int64) AdaptOption {
+	return func(c *adaptConfig) { c.maxMemory = n }
+}
+
 // Adapt validates and compiles a user handler function into an http.HandlerFunc.
 //
 // The returned closure reuses precomputed metadata and field resolvers so that
 // expensive reflection analysis happens once at startup, not on every request.
-func Adapt(fn interface{}) (http.HandlerFunc, error) {
+func Adapt(fn interface{}, opts ...AdaptOption) (http.HandlerFunc, error) {
+	cfg := adaptConfig{maxMemory: defaultMaxMemory}
+	for _, opt := range opts {
+		opt(&cfg)
+	}
+
 	meta, err := Analyze(fn)
 	if err != nil {
 		return nil, err
@@ -26,7 +48,7 @@ func Adapt(fn interface{}) (http.HandlerFunc, error) {
 		return nil, fmt.Errorf("handler input must be a struct, got %s", inputType.Kind())
 	}
 
-	resolvers, bodyFieldIdx, err := buildResolvers(inputType)
+	resolvers, bodyFieldIdx, err := buildResolvers(inputType, cfg.maxMemory)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +98,13 @@ func Adapt(fn interface{}) (http.HandlerFunc, error) {
 		if meta.ReturnsError {
 			errVal := results[len(results)-1]
 			if !errVal.IsNil() {
-				writeError(w, http.StatusInternalServerError, errVal.Interface().(error).Error())
+				handlerErr := errVal.Interface().(error)
+				var httpErr *HTTPError
+				if errors.As(handlerErr, &httpErr) {
+					writeError(w, httpErr.Code, httpErr.Message)
+				} else {
+					writeError(w, http.StatusInternalServerError, handlerErr.Error())
+				}
 				return
 			}
 		}

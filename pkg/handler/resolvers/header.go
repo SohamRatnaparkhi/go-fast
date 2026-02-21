@@ -14,7 +14,7 @@ type HeaderResolver struct {
 
 var _ FieldResolver = (*HeaderResolver)(nil)
 
-// NewHeaderResolver constructs a resolver for json:"header:<name>" fields.
+// NewHeaderResolver constructs a resolver for gofast:"header:<name>" fields.
 func NewHeaderResolver(fieldIdx int, headerName string, fieldType reflect.Type) *HeaderResolver {
 	return &HeaderResolver{fieldIdx: fieldIdx, headerName: headerName, fieldType: fieldType}
 }

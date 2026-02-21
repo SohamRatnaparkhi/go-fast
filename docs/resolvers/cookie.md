@@ -5,15 +5,15 @@ Extracts a value from an HTTP cookie.
 ## Tag
 
 ```
-json:"cookie:<cookie-name>"
+gofast:"cookie:<cookie-name>"
 ```
 
 ## Example
 
 ```go
 func GetProfile(req struct {
-    Session string `json:"cookie:session_id"`
-    Theme   string `json:"cookie:theme"`
+    Session string `gofast:"cookie:session_id"`
+    Theme   string `gofast:"cookie:theme"`
 }) (*ProfileResponse, error) {
     // req.Session = "abc123"
     // req.Theme   = "dark"
@@ -30,6 +30,6 @@ func GetProfile(req struct {
 
 | Framework | Code |
 |-----------|------|
-| **go-fast** | `Session string \`json:"cookie:session_id"\`` |
+| **go-fast** | `Session string \`gofast:"cookie:session_id"\`` |
 | Gin | `session, err := c.Cookie("session_id"); if err != nil { ... }` |
 | Fiber | `session := c.Cookies("session_id")` |

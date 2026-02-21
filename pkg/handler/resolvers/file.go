@@ -19,15 +19,21 @@ var MultipartFileHeaderType = reflect.TypeOf((*multipart.FileHeader)(nil))
 // The field type must be *multipart.FileHeader. The resolver accesses the
 // parsed multipart form directly, avoiding an unnecessary file open.
 type FileResolver struct {
-	fieldIdx int
-	fileName string
+	fieldIdx  int
+	fileName  string
+	maxMemory int64
 }
 
 var _ FieldResolver = (*FileResolver)(nil)
 
-// NewFileResolver constructs a resolver for json:"file:<name>" fields.
-func NewFileResolver(fieldIdx int, fileName string) *FileResolver {
-	return &FileResolver{fieldIdx: fieldIdx, fileName: fileName}
+// NewFileResolver constructs a resolver for gofast:"file:<name>" fields.
+// maxMemory controls the maximum bytes stored in memory for multipart parsing;
+// pass 0 to use the default (32 MB).
+func NewFileResolver(fieldIdx int, fileName string, maxMemory int64) *FileResolver {
+	if maxMemory <= 0 {
+		maxMemory = defaultMaxMemory
+	}
+	return &FileResolver{fieldIdx: fieldIdx, fileName: fileName, maxMemory: maxMemory}
 }
 
 func (r *FileResolver) FieldIndex() int { return r.fieldIdx }
@@ -37,7 +43,7 @@ func (r *FileResolver) Resolve(ctx *Context) (reflect.Value, error) {
 		return reflect.Value{}, fmt.Errorf("request context is nil")
 	}
 
-	if err := ctx.Request.ParseMultipartForm(defaultMaxMemory); err != nil {
+	if err := ctx.Request.ParseMultipartForm(r.maxMemory); err != nil {
 		return reflect.Value{}, fmt.Errorf("resolve file %q: %w", r.fileName, err)
 	}
 

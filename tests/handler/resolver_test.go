@@ -266,7 +266,7 @@ func newMultipartFileRequest(t *testing.T, fieldName, fileName, content string) 
 }
 
 func TestFileResolver_Resolve(t *testing.T) {
-	resolver := handler.NewFileResolver(1, "avatar")
+	resolver := handler.NewFileResolver(1, "avatar", 0)
 	req := newMultipartFileRequest(t, "avatar", "photo.png", "fake-image-data")
 	ctx := &handler.Context{Request: req}
 
@@ -290,7 +290,7 @@ func TestFileResolver_Resolve(t *testing.T) {
 }
 
 func TestFileResolver_Resolve_MissingFile(t *testing.T) {
-	resolver := handler.NewFileResolver(1, "avatar")
+	resolver := handler.NewFileResolver(1, "avatar", 0)
 	req := newMultipartFileRequest(t, "document", "doc.pdf", "content")
 	ctx := &handler.Context{Request: req}
 
@@ -301,7 +301,7 @@ func TestFileResolver_Resolve_MissingFile(t *testing.T) {
 }
 
 func TestFileResolver_Resolve_NotMultipart(t *testing.T) {
-	resolver := handler.NewFileResolver(1, "avatar")
+	resolver := handler.NewFileResolver(1, "avatar", 0)
 	req := httptest.NewRequest(http.MethodPost, "/upload",
 		strings.NewReader("plain body"))
 	ctx := &handler.Context{Request: req}
@@ -313,7 +313,7 @@ func TestFileResolver_Resolve_NotMultipart(t *testing.T) {
 }
 
 func TestFileResolver_FieldIndex(t *testing.T) {
-	resolver := handler.NewFileResolver(5, "doc")
+	resolver := handler.NewFileResolver(5, "doc", 0)
 	if resolver.FieldIndex() != 5 {
 		t.Fatalf("FieldIndex() = %d, want 5", resolver.FieldIndex())
 	}

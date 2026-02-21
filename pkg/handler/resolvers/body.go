@@ -14,7 +14,7 @@ type BodyResolver struct {
 
 var _ FieldResolver = (*BodyResolver)(nil)
 
-// NewBodyResolver constructs a resolver for json:"body" fields.
+// NewBodyResolver constructs a resolver for gofast:"body" fields.
 func NewBodyResolver(fieldIdx int, fieldType reflect.Type) *BodyResolver {
 	return &BodyResolver{fieldIdx: fieldIdx, fieldType: fieldType}
 }
